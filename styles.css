@@ -1,0 +1,382 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.count-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+#question-container {
+    margin: 2rem 0;
+}
+
+#answers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.answer-option {
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.answer-option:hover {
+    background-color: #f8f9fa;
+}
+
+.answer-option.selected {
+    border-color: #3498db;
+    background-color: #ebf5fb;
+}
+
+.correct {
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+
+.incorrect {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+}
+
+#review-container {
+    text-align: right;
+    margin: 2rem 0;
+}
+
+.review-item {
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.review-item h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.user-answer {
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.correct-answer {
+    color: #28a745;
+    margin: 0.5rem 0;
+}
+
+.explanation {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+#review-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+#copy-review-btn {
+    background-color: #6c757d;
+    margin: 1rem 0;
+}
+
+#copy-review-btn:hover {
+    background-color: #5a6268;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto 2rem auto;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.leaderboard-table th, .leaderboard-table td {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+.leaderboard-table th {
+    background: #3498db;
+    color: #fff;
+    font-size: 1.1rem;
+}
+.leaderboard-table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+.leaderboard-table tr:first-child td {
+    font-weight: bold;
+    color: #27ae60;
+}
+.leaderboard-table td.rank {
+    font-weight: bold;
+    color: #2980b9;
+}
+
+/* تحسين شكل زر المعلومات (i) وزر النجمة */
+.info-btn,
+.star-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2.5px solid #3498db;
+    background: linear-gradient(135deg, #fff 60%, #eaf6fb 100%);
+    color: #3498db;
+    font-size: 2.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+        background 0.3s,
+        color 0.3s,
+        border-color 0.3s,
+        box-shadow 0.3s,
+        transform 0.18s;
+    margin: 0 8px;
+    box-shadow: 0 4px 18px rgba(52,152,219,0.13);
+    outline: none;
+    position: fixed;
+    z-index: 2000;
+}
+
+.info-btn {
+    left: 24px;
+    bottom: 24px;
+}
+
+.star-btn {
+    right: 84px;
+    bottom: 24px;
+    border-color: #ffc107;
+    color: #ffc107;
+    background: linear-gradient(135deg, #fff 60%, #fffbe6 100%);
+}
+
+.info-btn:hover,
+.star-btn:hover {
+    background: #3498db;
+    color: #fff;
+    border-color: #217dbb;
+    transform: scale(1.15) rotate(-8deg);
+    box-shadow: 0 8px 24px rgba(52,152,219,0.22);
+}
+
+.star-btn,
+.star-btn span {
+    transition: color 0.3s, background 0.3s, border-color 0.3s;
+}
+
+.star-btn.active,
+.star-btn.active:hover {
+    background: #f1c40f;
+    color: #fff;
+    border-color: #f1c40f;
+    box-shadow: 0 8px 24px rgba(241,196,15,0.22);
+}
+
+.info-btn:active,
+.star-btn:active {
+    animation: pulse-btn 0.22s;
+    box-shadow: 0 2px 8px rgba(52,152,219,0.18);
+}
+
+@keyframes pulse-btn {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.22); }
+    100% { transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+    padding: 0;
+    min-height: 100vh;
+    align-items: flex-start;
+  }
+  .container {
+    padding: 0.7rem 0.3rem;
+    border-radius: 0;
+    width: 100vw;
+    max-width: 100vw;
+    min-height: 100vh;
+    box-shadow: none;
+  }
+  h1 {
+    font-size: 1.3rem;
+  }
+  h2 {
+    font-size: 1.1rem;
+  }
+  .btn {
+    padding: 10px 10px;
+    font-size: 0.95rem;
+    width: 95%;
+    margin: 0.3rem auto;
+    display: block;
+  }
+  .quiz-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    padding: 0.3rem;
+  }
+  #question-container {
+    margin: 1rem 0 0.5rem 0;
+  }
+  #answers-container {
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+  }
+  .answer-option {
+    padding: 0.7rem;
+    font-size: 0.98rem;
+  }
+  .review-item {
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+  .review-item h3 {
+    font-size: 1rem;
+  }
+  .explanation {
+    padding: 0.8rem;
+  }
+  #review-container {
+    max-height: 60vh;
+    padding: 0.5rem;
+  }
+  .modal > div {
+    min-width: 90vw !important;
+    max-width: 98vw !important;
+    padding: 10px 5px !important;
+  }
+  #info-btn, #solved-btn {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.3rem !important;
+    bottom: 12px !important;
+  }
+  #info-btn {
+    left: 12px !important;
+  }
+  #solved-btn {
+    right: 12px !important;
+  }
+}
+
+#progress-bar-fill {
+    /* غير اللون الأزرق إلى أخضر */
+    background: #28a745 !important;
+}
+
+/* تنسيقات خاصة لرابط رقم الهاتف في نافذة المعلومات */
+.info-phone-link {
+    color: #007bff;
+    text-decoration: underline;
+    font-weight: bold;
+    font-family: monospace;
+    letter-spacing: 1px;
+    font-size: 1.13rem;
+    transition: color 0.2s;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    display: inline-block;
+}
+.info-phone-link:hover,
+.info-phone-link:focus {
+    color: #0056b3;
+    background: #e3f0ff;
+    text-decoration: none;
+    outline: none;
+}

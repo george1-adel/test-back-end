@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الاختبارات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div id="welcome-page" class="page active">
+            <h1>مرحبا بك في المدعكة</h1>
+            <p>ادخل معانا في زنقة الكلاب</p>
+            <button onclick="goToNextStep()" class="btn">ادخل</button>
+        </div>
+
+        <div id="username-page" class="page">
+            <h2>اكتب اسمك عشان تبدأ</h2>
+            <input type="text" id="username-input" placeholder="اسمك" class="input" style="padding:10px; font-size:1rem; width:60%; margin-bottom:1rem;" />
+            <br>
+            <button class="btn" onclick="submitUsername()">يلا بينا</button>
+        </div>
+
+        <div id="chapter-select-page" class="page">
+            <h2 id="chapter-select-title">اختار الفصل أو المنهج</h2>
+            <div id="chapter-options" class="count-options">
+                <button class="btn" onclick="selectChapter(1)">الفصل الأول</button>
+                <button class="btn" onclick="selectChapter(2)">الفصل الثاني</button>
+                <button class="btn" onclick="selectChapter(3)">الفصل الثالث</button>
+                <button class="btn" onclick="selectChapter(4)">الفصل الرابع</button>
+                <button class="btn" onclick="selectChapter(5)">الفصل الخامس</button>
+                <button class="btn" onclick="selectChapter(6)">الفصل السادس</button>
+                <button class="btn btn-full-curriculum" style="background:#28a745; color:#fff; margin-top:10px;" onclick="selectFullCurriculum()">المنهج كامل</button>
+            </div>
+        </div>
+
+        <div id="question-count-page" class="page">
+            <h2>اختار عدد الأسئلة</h2>
+            <div class="count-options">
+                <button onclick="showTimerModal(5)" class="btn">5 أسئلة</button>
+                <button onclick="showTimerModal(10)" class="btn">10 أسئلة</button>
+                <button onclick="showTimerModal(15)" class="btn">15 أسئلة</button>
+                <button onclick="showTimerModal(20)" class="btn">20 أسئلة</button>
+            </div>
+        </div>
+
+        <div id="quiz-page" class="page">
+            <div class="quiz-header">
+                <span id="question-number"></span>
+                <span id="timer"></span>
+            </div>
+            <div id="question-container" class="container">
+                <div id="timer" style="font-size:1.2rem; color:#007bff; text-align:center; margin-bottom:10px; display:none;"></div>
+                <!-- شريط التقدم -->
+                <div id="progress-bar-container" style="margin-bottom: 20px;">
+                    <div id="progress-bar" style="height: 20px; background: #e9ecef; border-radius: 10px; overflow: hidden;">
+                        <div id="progress-bar-fill" style="height: 100%; width: 0; background: #28a745; transition: width 0.4s;"></div>
+                    </div>
+                    <div id="progress-text" style="text-align: center; margin-top: 5px; font-weight: bold;"></div>
+                </div>
+                <h3 id="question-text"></h3>
+                <div id="answers-container"></div>
+            </div>
+            <div id="quiz-navigation">
+                <button id="prev-btn" class="btn" onclick="prevQuestion()">السابق</button>
+                <button id="next-btn" class="btn" onclick="nextQuestion()">التالي</button>
+                <button id="submit-btn" class="btn" onclick="submitQuiz()" style="display:none">إنهاء الاختبار</button>
+            </div>
+        </div>
+
+        <div id="results-page" class="page">
+            <h2>نتيجتك</h2>
+            <p>جبت <span id="score"></span> من <span id="total-questions"></span></p>
+            <button class="btn" onclick="showReviewPage()">راجع إجاباتك</button>
+            <button class="btn" onclick="showLeaderboardPage()">شوف المتصدرين</button>
+            <button onclick="startNewExam()" class="btn">ابدأ امتحان جديد</button>
+        </div>
+
+        <div id="review-page" class="page">
+            <h2>مراجعة الإجابات</h2>
+            <div id="review-container"></div>
+            <button id="copy-review-btn" class="btn" style="margin: 15px 0;">انسخ المراجعة للنص</button>
+            <button class="btn" onclick="showPage('results-page')">ارجع للنتيجة</button>
+        </div>
+
+        <div id="leaderboard-page" class="page">
+            <h2>جدول المتصدرين</h2>
+            <div id="leaderboard-list" style="margin: 2rem 0;"></div>
+            <button class="btn" onclick="showPage('welcome-page')">ارجع للرئيسية</button>
+        </div>
+    </div>
+    <!-- نافذة اختيار المؤقت -->
+    <div id="timer-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:30px 20px; border-radius:10px; max-width:90vw; text-align:center; box-shadow:0 2px 10px #0002;">
+            <h3>عايز تشغل المؤقت وانت بتحل؟</h3>
+            <p>ممكن تختار تحل بوقت أو من غير وقت.</p>
+            <button id="start-with-timer" class="btn" style="margin:10px;">شغل المؤقت</button>
+            <button id="start-without-timer" class="btn" style="margin:10px;">من غير مؤقت</button>
+        </div>
+    </div>
+    <!-- نافذة تأكيد إرسال الاختبار -->
+    <div id="submit-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:30px 20px; border-radius:10px; max-width:90vw; text-align:center; box-shadow:0 2px 10px #0002;">
+            <h3>عايز تسلم الامتحان؟</h3>
+            <p>متأكد إنك عايز تسلم؟ مش هتعرف تعدل بعد كده.</p>
+            <button id="confirm-submit-btn" class="btn" style="margin:10px;">سلم الامتحان</button>
+            <button id="cancel-submit-btn" class="btn" style="margin:10px;">لأ، استنى</button>
+        </div>
+    </div>
+    <!-- زر info الدائري أسفل يسار الصفحة -->
+    <button id="info-btn" class="info-btn" title="إبلاغ عن مشكلة أو اقتراح">
+        <span style="font-weight:bold; font-family:sans-serif;">i</span>
+    </button>
+    <!-- زر إحصائية عدد الأسئلة المجاب عليها (جديد) -->
+    <button id="solved-btn" class="star-btn" title="عدد الأسئلة التي أجبت عليها">
+        <span style="font-weight:bold; font-family:sans-serif;">★</span>
+    </button>
+    <!-- نافذة عدد الأسئلة المجاب عليها (جديد) -->
+    <div id="solved-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:3000; align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:30px 20px; border-radius:10px; max-width:90vw; min-width:300px; text-align:center; box-shadow:0 2px 10px #0002; position:relative;">
+            <button id="close-solved-modal" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; color:#888; cursor:pointer;">&times;</button>
+            <h3>إحصائية الأسئلة المجاب عليها</h3>
+            <div id="solved-modal-count" style="font-size:1.3rem; color:#ffc107; margin: 20px 0;"></div>
+        </div>
+    </div>
+    <!-- نافذة البريد للتواصل -->
+    <div id="email-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:3000; align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:30px 20px; border-radius:10px; max-width:90vw; min-width:300px; text-align:center; box-shadow:0 2px 10px #0002; position:relative;">
+            <button id="close-email-modal" style="position:absolute; top:10px; left:10px; background:none; border:none; font-size:1.5rem; color:#888; cursor:pointer;">&times;</button>
+            <h3>لو عندك مشكلة أو اقتراح</h3>
+            <p>لو فيه أي مشكلة أو عندك اقتراح، ابعتلنا على الإيميل ده:</p>
+            <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin: 15px 0;">
+                <span id="support-email" style="font-size:1.1rem; direction:ltr; user-select:all;">georgeadel502@gmail.com</span>
+                <button id="copy-email-btn" class="btn" style="padding:4px 12px; font-size:1rem;">انسخ</button>
+            </div>
+            <div style="margin: 10px 0; color: #333;">
+                أو تواصل على رقم الهاتف:
+                <a href="tel:01278936828" class="info-phone-link">
+                    01278936828
+                </a>
+            </div>
+            <div id="copy-success" style="color:green; display:none;">الإيميل اتنسخ!</div>
+        </div>
+    </div>
+    <div id="system-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:4000; align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:30px 20px; border-radius:10px; max-width:90vw; min-width:300px; text-align:center; box-shadow:0 2px 10px #0002; position:relative;">
+            <span id="system-modal-message" style="font-size:1.1rem; color:#333;"></span>
+            <br>
+            <div id="system-modal-buttons" style="margin-top:20px;">
+                <button id="close-system-modal" class="btn">حسناً</button>
+                <button id="cancel-system-modal" class="btn" style="display:none;">إلغاء</button>
+            </div>
+        </div>
+    </div>
+    <script src="questions.js"></script>
+    <script src="chapter2.js"></script>
+    <script src="chapter3.js"></script>
+    <script src="chapter4.js"></script>
+    <script src="chapter5.js"></script>
+    <script src="chapter6.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+</body>
+</html>
